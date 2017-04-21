@@ -25,8 +25,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Homie Setup Handler
 void setupHandler() {
-  // Nodes part
-  photocellNode.setProperty("unit").send("on-off");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +35,7 @@ void loopHandler() {
     if (isnan(lightLevel)) {
       Homie.getLogger() << F("Failed to read from sensor!");
     } else {
-      Homie.getLogger() << F("Light level: ") << lightLevel << endl;
-      Homie.getLogger() << F("Light is   : ") << (lightLevel==0?"on":"off") << endl;
+      Homie.getLogger() << F("Light level = ") << lightLevel << " (" << (lightLevel==0?"on":"off") << ")" << endl;
       photocellNode.setProperty("lightLevel").send(String(lightLevel));
     }
     lastMeasureSent = millis();
@@ -54,8 +51,7 @@ void setup() {
   Homie_setFirmware(FW_NAME, FW_VERSION);
   Homie.setSetupFunction(setupHandler).setLoopFunction(loopHandler);
 
-  // DS18B20 sensor
-    photocellNode.advertise("unit");
+  // Photocell
     photocellNode.advertise("lightLevel");
 
   Homie.setup();
